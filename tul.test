@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+import random
+import unittest
+import subprocess
+
+MINTUL=1
+MAXTUL=15000
+MINN=1
+MAXN=20000
+
+prog="./tul"
+def runProg(data):
+	p = subprocess.Popen([prog], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+	out, err = p.communicate(input=data)
+	return int(out)
+
+class TestRandomTulips(unittest.TestCase):
+	def test_onetulip(self):
+		n = random.randint(MINTUL, MAXTUL); data = "%d\n%d\n" % (n, MAXTUL)
+		self.assertEqual(runProg(data), MAXTUL-1)
+	def test_sametulip_max(self):
+		data = "%d\n%s\n" % (MAXN, " ".join([str(MAXTUL) for i in range(MAXN)]))
+		self.assertEqual(runProg(data), MAXTUL-1)
+	def test_sametulip_min(self):
+		data = "%d\n%s\n" % (MAXN, " ".join([str(MINTUL) for i in range(MAXN)]))
+		self.assertEqual(runProg(data), MAXTUL-1)
+	def test_random(self):
+		n = random.randint(MINTUL, MAXTUL)
+		l = range(1, n + 1)
+		random.shuffle(l)
+		data = "%d\n%s\n" % (n, " ".join([str(x) for x in l]))
+		self.assertEqual(runProg(data), MAXTUL-n)
+
+if __name__ == '__main__':
+	random.seed()
+	unittest.main()
