@@ -15,6 +15,8 @@ def runProg(data):
 	return int(out)
 
 class TestRandomTulips(unittest.TestCase):
+	def test_sample(self):
+		self.assertEqual(runProg("8\n3 6 2 2 4 6 3 7\n"), 14995)
 	def test_onetulip(self):
 		n = random.randint(MINTUL, MAXTUL); data = "%d\n%d\n" % (n, MAXTUL)
 		self.assertEqual(runProg(data), MAXTUL-1)
