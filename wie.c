@@ -30,14 +30,12 @@ int main(int argc, char *argv[])
   {
     if(y[i] != 'W')
     {
-      /*printf("enter i: %d\n", i);*/
       for(j=curx; j<n; j++, curx++)
       {
         if(x[curx] != 'W')
           break;
       }
       board[i][curx++] = 'W';
-      /*printf("%d %d\n", i, curx);*/
     }
     board[i][n] = '\0';
     printf("%s\n", board[i]);
