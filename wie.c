@@ -6,13 +6,13 @@ char board[MAX][MAX+1];
 char x[MAX+1], y[MAX+1];
 int main(int argc, char *argv[])
 {
-  int n, i, j;
-  scanf("%d\n", &n);
+  int n, i, j, r;
+  r = scanf("%d\n", &n);
   memset(x, '.', n);
   memset(y, '.', n);
   for(i=0; i<n; i++)
   {
-    scanf("%s\n", board[i]);
+    r = scanf("%s\n", board[i]);
     int found_W = 0;
     for(j=0; j<n; j++)
     {
