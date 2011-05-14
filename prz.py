@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 t = int(raw_input())
 for case in xrange(t):
-	result = 'NIE'
+	result = 'TAK'
 	(s, k, n) = map(int, raw_input().split())
 	p = map(int, raw_input().split())
 	sums = [p[0]] # end point
@@ -43,9 +43,8 @@ for case in xrange(t):
 							mtmp.append(tmp)
 		m = mtmp
 		if not mtmp:
+			result = 'NIE'
 			break
 		mtmp = []
-	else:
-		result = 'TAK'
 		
 	print("%s" % result)
