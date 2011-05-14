@@ -3,3 +3,9 @@
 *.gcov
 *.out
 *.in
+*.test
+testy.*
+prz
+sis
+wsp
+wie
