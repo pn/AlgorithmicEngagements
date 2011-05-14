@@ -17,8 +17,6 @@ int main(int argc, char* argv[])
 	while(cases--)
 	{
 		ull s, k, n, i, width;
-		//char *result[10];
-		//sprintf(result, "TAK");
 		z = scanf("%lld %lld %lld\n", &s, &k, &n);
 		z = scanf("%lld", &p[0]);
 		sums[0] = p[0];
@@ -99,7 +97,6 @@ int main(int argc, char* argv[])
 			mnum = mtmpnum;
 			if(mtmpnum == 0)
 			{
-				//sprintf(result, "NIE");
 				failed = 1;
 				break;
 			}
@@ -111,7 +108,6 @@ int main(int argc, char* argv[])
 			continue;
 		}
 
-		//printf("%s\n", result);
 		printf("TAK\n");
 	}
 	return 0;
