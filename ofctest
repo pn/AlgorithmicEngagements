@@ -57,7 +57,8 @@ class TestPotyczki(unittest.TestCase):
 	@timeout(10)
 	def file_test(self, file_num):
 		d = "testy/%s" % self.prog
-		for match in fnmatch.filter(os.listdir(d), "%s*.in" % self.prog):
+		file_list = sorted(os.listdir(d))
+		for match in fnmatch.filter(file_list, "%s%d.in" % (self.prog, file_num))+fnmatch.filter(file_list, "%s%d[a-z].in" % (self.prog, file_num)):
 			path_base = "%s/%s" % (d, match.strip('in'))
 			f_in = open("%s%s" % (path_base, "in"))
 			f_out = open("%s%s" % (path_base, "out"))
