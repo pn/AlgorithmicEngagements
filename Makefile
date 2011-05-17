@@ -1,10 +1,10 @@
 #PROFOPTS=-fprofile-arcs -ftest-coverage
 PROFOPTS=
 CCOPTS=-O0 -lm -static -Wall -ggdb
-TARGETS=tul wie prz
+TARGETS=tul wie wsp prz sis
 CC=clang
 
-all: wie
+all: $(TARGETS)
 
 tul: tul.c
 	$(CC) $(PROFOPTS) $(CCOPTS) tul.c -o tul
