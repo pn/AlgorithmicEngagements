@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+import random
+import unittest
+import subprocess
+
+MAXN=1000
+
+prog="./wsp"
+def runProg(data):
+	p = subprocess.Popen([prog], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+	out, err = p.communicate(input=data)
+	return out
+
+def data2str(data):
+	return "%d\n%s\n" % (len(data), '\n'.join([' '.join(map(str, p)) for p in data]))
+
+class TestWsp(unittest.TestCase):
+	def test_sample(self):
+		data_list = [
+([[1,1],[3,2],[1,4]], 2),
+([[1,1],[3,2],[1,4],[0,0]], 3),
+]
+		for data, result in data_list:
+			print(data2str(data))
+			self.assertEqual(int(runProg(data2str(data))), result)
+
+if __name__ == '__main__':
+	random.seed()
+	unittest.main()
