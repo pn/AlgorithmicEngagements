@@ -57,7 +57,6 @@ class TestPotyczki(unittest.TestCase):
 	@timeout(10)
 	def file_test(self, file_num):
 		d = "testy/%s" % self.prog
-		#path_base = "testy/%s/%s%d." % (prog, prog, file_num)
 		for match in fnmatch.filter(os.listdir(d), "%s*.in" % self.prog):
 			path_base = "%s/%s" % (d, match.strip('in'))
 			f_in = open("%s%s" % (path_base, "in"))
@@ -105,7 +104,7 @@ if __name__ == "__main__":
 	os.listdir('.')
 	codes = [c for c in codes if c in os.listdir('.')]
 	if not codes:
-		sys.stderr.write('Nothing to test! Your programs should be name same as problem names.')
+		sys.stderr.write('Nothing to test! Your programs should be named same as problem names.\n')
 		sys.exit(3)
 
 	for code in codes:
