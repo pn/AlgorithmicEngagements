@@ -1,14 +1,26 @@
-PROFOPTS=-fprofile-arcs -ftest-coverage
-CCOPTS=-g -lm -static
-TARGETS=tul wie
-CC=gcc
+#PROFOPTS=-fprofile-arcs -ftest-coverage
+PROFOPTS=
+CCOPTS=-O0 -lm -static -Wall -ggdb
+TARGETS=tul wie prz
+CC=clang
+
+all: wie
 
 tul: tul.c
-	gcc $(PROFOPTS) $(CCOPTS) tul.c -o tul
+	$(CC) $(PROFOPTS) $(CCOPTS) tul.c -o tul
 wie: wie.c
-	gcc $(PROFOPTS) $(CCOPTS) wie.c -o wie
+	$(CC) $(PROFOPTS) $(CCOPTS) wie.c -o wie
+wsp: wsp.c
+	$(CC) $(PROFOPTS) $(CCOPTS) wsp.c -o wsp
+prz: prz.c
+	$(CC) $(PROFOPTS) $(CCOPTS) prz.c -o prz
+sis: sis.c
+	$(CC) $(PROFOPTS) $(CCOPTS) sis.c -o sis
 wie.test: wie
 	./wie < wie.in > wie.out
 	gcov wie.c
+wsp.test2:
+	./wsp < wsp.in
+	for x in `seq 1 6`; do ./wsp < testy.wsp/$$x.in > testy.wsp/$$x.out_; done
 clean:
 	rm -f *.gcda *.gcno *.gcov *.out $(TARGETS)
