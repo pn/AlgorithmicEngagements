@@ -1,0 +1,131 @@
+#!/usr/bin/env python
+import urllib2, sys, zipfile, unittest, subprocess, os, fnmatch, os.path
+import signal
+
+# see following url for the source of TimeoutClass and timout function
+# http://www.saltycrane.com/blog/2010/04/using-python-timeout-decorator-uploading-s3/
+class TimeoutError(Exception):
+	def __init__(self, value = "Timed Out"):
+		self.value = value
+	def __str__(self):
+		return repr(self.value)
+
+def timeout(seconds_before_timeout):
+	def decorate(f):
+		def handler(signum, frame):
+			raise TimeoutError()
+		def new_f(*args, **kwargs):
+			old = signal.signal(signal.SIGALRM, handler)
+			signal.alarm(seconds_before_timeout)
+			try:
+				result = f(*args, **kwargs)
+			finally:
+				signal.signal(signal.SIGALRM, old)
+			signal.alarm(0)
+			return result
+		new_f.func_name = f.func_name
+		return new_f
+	return decorate
+base_url = 'http://potyczkialgorytmiczne.pl/user.phtml/'
+files = {
+'tul': 'pa11-tul.zip?op=get&id=627',
+'wie': 'pa11-wie.zip?op=get&id=638',
+'pec': 'pa11-pec.zip?op=get&id=639',
+'wsp': 'pa11-wsp.zip?op=get&id=640',
+'prz': 'pa11-prz.zip?op=get&id=655',
+'pal': 'pa11-pal.zip?op=get&id=658',
+'cia': 'pa11-cia.zip?op=get&id=667',
+'sis': 'pa11-sis.zip?op=get&id=670',
+'aut': 'pa11-aut.zip?op=get&id=671',
+'naj': 'pa11-naj.zip?op=get&id=673',
+'las': 'pa11-las.zip?op=get&id=674',
+'kan': 'pa11-kan.zip?op=get&id=672',
+'wak': 'pa11-wak.zip?op=get&id=669',
+'szl': 'pa11-szl.zip?op=get&id=668',
+'plo': 'pa11-plo.zip?op=get&id=657',
+'pod': 'pa11-pod.zip?op=get&id=656',
+}
+
+class TestPotyczki(unittest.TestCase):
+	def __init__(self, testname, prog):
+		super(TestPotyczki, self).__init__(testname)
+		self.prog = prog
+	def runProg(self, data):
+		p = subprocess.Popen(["./%s" % self.prog], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+		out, err = p.communicate(input=data)
+		return out
+	@timeout(10)
+	def file_test(self, file_num):
+		d = "testy/%s" % self.prog
+		#path_base = "testy/%s/%s%d." % (prog, prog, file_num)
+		for match in fnmatch.filter(os.listdir(d), "%s*.in" % self.prog):
+			path_base = "%s/%s" % (d, match.strip('in'))
+			f_in = open("%s%s" % (path_base, "in"))
+			f_out = open("%s%s" % (path_base, "out"))
+			d_in = f_in.read()
+			d_out = f_out.read()
+			f_in.close()
+			f_out.close()
+			self.assertEqual(self.runProg(d_in).strip(), d_out.strip())
+	def test_0(self):
+		self.file_test(0)
+	def test_1(self):
+		self.file_test(1)
+	def test_2(self):
+		self.file_test(2)
+	def test_3(self):
+		self.file_test(3)
+	def test_4(self):
+		self.file_test(4)
+	def test_5(self):
+		self.file_test(5)
+	def test_6(self):
+		self.file_test(6)
+	def test_7(self):
+		self.file_test(7)
+	def test_8(self):
+		self.file_test(8)
+	def test_9(self):
+		self.file_test(9)
+	def test_10(self):
+		self.file_test(10)
+
+if __name__ == "__main__":
+	if(len(sys.argv) < 2):
+		sys.stderr.write('Usage: %s xxx  # where xxx is problem code\n' % sys.argv[0])
+		sys.exit(1)
+	code = sys.argv[1]
+	if code == 'all':
+		codes = list(files)
+	else:
+		if code not in files:
+			sys.stderr.write('Unknown problem code: %s\n' % code)
+			sys.exit(2)
+		codes = [code]
+	os.listdir('.')
+	codes = [c for c in codes if c in os.listdir('.')]
+	if not codes:
+		sys.stderr.write('Nothing to test! Your programs should be name same as problem names.')
+		sys.exit(3)
+
+	for code in codes:
+		if not os.path.exists('testy/%s' % code):
+			url = "%s%s" % (base_url, files[code])
+			sys.stderr.write('Trying to fetch %s ... ' % url)
+			response = urllib2.urlopen(url)
+			r = response.read()
+			fname = "%s.zip" % code
+			f = open(fname, 'w')
+			f.write(r)
+			f.close()
+			sys.stderr.write('written %s\n' % fname)
+			sys.stderr.write('Extracting %s ... ' % fname)
+			zipfile.ZipFile(fname).extractall()
+			sys.stderr.write('OK\n')
+
+	suite = unittest.TestSuite()
+	for code in codes:
+		for case in xrange(11):
+			suite.addTest(TestPotyczki("test_%d" % case, code))
+	unittest.TextTestRunner().run(suite)
+
