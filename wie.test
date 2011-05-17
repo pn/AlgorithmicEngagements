@@ -1,0 +1,66 @@
+#!/usr/bin/env python
+import random
+import unittest
+import subprocess
+import copy
+
+MAXN=1000
+
+def array2str(a):
+	res = ''
+	for row in a:
+		res += "%s\n" % (''.join(row))
+	return res
+
+prog="./wie"
+def runProg(data):
+	p = subprocess.Popen([prog], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+	out, err = p.communicate(input=data)
+	return out
+
+class TestWie(unittest.TestCase):
+	def validate_board(self, s):
+		rows = s.strip().split('\n')
+		self.assertEqual(len(rows), len(rows[0]))
+		self.assertEqual(len(rows), len(rows[len(rows)-1]))
+		x = ['.']*len(rows)
+		for row in rows:
+			self.assertTrue('W' in row)
+			for col in xrange(len(row)):
+				if row[col] == 'W':
+					self.assertEqual(x[col], '.')
+					x[col] = 'W'
+
+	def run_random(self, N, noneempty=None):
+		board = []
+		perm = random.sample(xrange(N), N)
+		for i in xrange(N):
+			board.append(['.']*N)
+			board[i][perm[i]] = 'W'
+		#print(array2str(board))
+		self.validate_board(array2str(board))
+		data = copy.copy(board)
+		number_empty = random.randint(0, N-1)
+		if noneempty == None:
+			number_empty = N - noneempty
+		empty_rows = random.sample(xrange(N), number_empty)
+		for row in empty_rows:
+			for x in xrange(N):
+				data[row][x] = '.'
+		inp = "%d\n%s" % (N, array2str(data))
+		result = runProg(inp)
+		self.validate_board(result)
+	def test_min(self):
+		self.run_random(2, 0)
+	def test_zero(self):
+		self.run_random(MAXN, 0)
+	def test_one(self):
+		self.run_random(MAXN, 1)
+	def test_max(self):
+		self.run_random(MAXN, MAXN)
+	def test_max_1(self):
+		self.run_random(MAXN, MAXN-1)
+
+if __name__ == '__main__':
+	random.seed()
+	unittest.main()
