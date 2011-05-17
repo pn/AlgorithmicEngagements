@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
 		fscanf(stdin, "%ld", &d);
 		a = d / BITSINLONG;
 		b = d % BITSINLONG;
-		if (!(tul[a] & 1 << b)) {
-			tul[a] |= 1 << b;
+		if (!(tul[a] & 1ul << b)) {
+			tul[a] |= 1ul << b;
 			result--;
 		}
 	}
