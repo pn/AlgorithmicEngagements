@@ -2,7 +2,7 @@
 import urllib2, sys, zipfile, unittest, subprocess, os, fnmatch, os.path
 import signal
 
-progname_format = "./%s" # set different prog. name e.g. "./%s.py"
+progname_format = "%s" # set different prog. name e.g. "%s.py"
 
 # see following url for the source of TimeoutClass and timout function
 # http://www.saltycrane.com/blog/2010/04/using-python-timeout-decorator-uploading-s3/
@@ -53,7 +53,7 @@ class TestPotyczki(unittest.TestCase):
 		super(TestPotyczki, self).__init__(testname)
 		self.prog = prog
 	def runProg(self, data):
-		p = subprocess.Popen([progname_format % self.prog], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+		p = subprocess.Popen(["./%s" % progname_format % self.prog], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
 		out, err = p.communicate(input=data)
 		return out
 	@timeout(10)
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 			sys.exit(2)
 		codes = [code]
 	os.listdir('.')
-	codes = [c for c in codes if c in os.listdir('.')]
+	codes = [c for c in codes if progname_format % c in os.listdir('.')]
 	if not codes:
 		sys.stderr.write('Nothing to test! Your programs should be named same as problem names.\n')
 		sys.exit(3)
