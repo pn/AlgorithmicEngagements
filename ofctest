@@ -62,13 +62,15 @@ class TestPotyczki(unittest.TestCase):
 		file_list = sorted(os.listdir(d))
 		for match in fnmatch.filter(file_list, "%s%d.in" % (self.prog, file_num))+fnmatch.filter(file_list, "%s%d[a-z].in" % (self.prog, file_num)):
 			path_base = "%s/%s" % (d, match.strip('in'))
-			f_in = open("%s%s" % (path_base, "in"))
+			f_in_name = "%s%s" % (path_base, "in")
+			f_in = open(f_in_name)
 			f_out = open("%s%s" % (path_base, "out"))
 			d_in = f_in.read()
-			d_out = f_out.read()
+			d_out = f_out.read().strip()
 			f_in.close()
 			f_out.close()
-			self.assertEqual(self.runProg(d_in).strip(), d_out.strip())
+			d_out_test = self.runProg(d_in).strip()
+			self.assertEqual(d_out_test, d_out, msg="'%s' != '%s' (input: %s)" % (d_out_test, d_out, f_in_name))
 	def test_0(self):
 		self.file_test(0)
 	def test_1(self):
