@@ -53,6 +53,8 @@ BigInt bigaddull(BigInt x, ull y)
 		x.b += MAX;
 	}
 	x.b += y;
+	x.a += x.b / MAX;
+	x.b %= MAX;
 	return x;
 }
 BigInt bigadd(BigInt x, BigInt y)
