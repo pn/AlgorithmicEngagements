@@ -22,5 +22,9 @@ wie.test: wie
 wsp.test2:
 	./wsp < wsp.in
 	for x in `seq 1 6`; do ./wsp < testy.wsp/$$x.in > testy.wsp/$$x.out_; done
+gengraph:
+	./gengraph | dot -Tpng | display
+
+.PHONY: clean gengraph
 clean:
 	rm -f *.gcda *.gcno *.gcov *.out $(TARGETS)
