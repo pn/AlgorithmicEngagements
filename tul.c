@@ -1,6 +1,6 @@
 #include <stdio.h>
 #define MAXTUL 15000
-#define BITSINLONG sizeof(long)*8
+#define BITSINLONG (sizeof(long)*8)
 
 unsigned long tul[MAXTUL / BITSINLONG + 1];
 int main(int argc, char *argv[])
